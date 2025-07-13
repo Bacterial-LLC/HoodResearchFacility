@@ -1,0 +1,188 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hood Research Facility LLC</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes wobble {
+      0% { transform: scale(1) rotate(0deg); }
+      25% { transform: scale(1.2) rotate(5deg); }
+      50% { transform: scale(0.9) rotate(-5deg); }
+      75% { transform: scale(1.1) rotate(3deg); }
+      100% { transform: scale(1) rotate(0deg); }
+    }
+    @keyframes bounceFade {
+      0% { opacity: 0; transform: translateY(50px); }
+      50% { opacity: 0.5; transform: translateY(-20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes spinPop {
+      0% { transform: rotate(0deg) scale(0.8); opacity: 0; }
+      50% { transform: rotate(180deg) scale(1.3); opacity: 0.7; }
+      100% { transform: rotate(360deg) scale(1); opacity: 1; }
+    }
+    @keyframes slideWiggle {
+      0% { transform: translateX(-100%) skewX(0deg); opacity: 0; }
+      50% { transform: translateX(20%) skewX(10deg); opacity: 0.6; }
+      100% { transform: translateX(0) skewX(0deg); opacity: 1; }
+    }
+
+    .animate-on-load {
+      animation-duration: 1s;
+      animation-fill-mode: forwards;
+      animation-iteration-count: 1;
+    }
+    .header-animate { animation-name: wobble; }
+    .hero-animate { animation-name: bounceFade; animation-delay: 0.2s; }
+    .services-animate { animation-name: spinPop; animation-delay: 0.4s; }
+    .team-animate { animation-name: slideWiggle; animation-delay: 0.6s; }
+    .support-animate { animation-name: slideWiggle; animation-delay: 0.8s; }
+    .memorial-animate { animation-name: bounceFade; animation-delay: 1.0s; }
+    .contact-animate { animation-name: wobble; animation-delay: 1.2s; }
+    .footer-animate { animation-name: slideWiggle; animation-delay: 1.4s; }
+  </style>
+</head>
+<body class="bg-gray-100 font-sans">
+  <header class="bg-blue-900 text-white py-6 animate-on-load header-animate">
+    <div class="container mx-auto px-4 flex justify-between items-center">
+      <h1 class="text-3xl font-bold">Hood Research Facility LLC</h1>
+      <nav>
+        <ul class="flex space-x-6">
+          <li><a href="#home" class="hover:text-blue-300">Home</a></li>
+          <li><a href="#services" class="hover:text-blue-300">Services</a></li>
+          <li><a href="#team" class="hover:text-blue-300">Our Team</a></li>
+          <li><a href="#support" class="hover:text-blue-300">Support Ukraine</a></li>
+          <li><a href="#memorial" class="hover:text-blue-300">Memorial</a></li>
+          <li><a href="#contact" class="hover:text-blue-300">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <section id="home" class="bg-blue-800 text-white py-20 animate-on-load hero-animate">
+    <div class="container mx-auto px-4 text-center">
+      <h2 class="text-4xl font-bold mb-4">Welcome to Hood Research Facility LLC</h2>
+      <p class="text-lg mb-6">Your trusted partner in cybersecurity, specializing in web penetration testing and DevSecOps solutions.</p>
+      <a href="#contact" class="bg-yellow-500 text-black px-6 py-3 rounded-full hover:bg-yellow-400">Get in Touch</a>
+    </div>
+  </section>
+
+  <section id="services" class="py-16 animate-on-load services-animate">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl font-bold text-center mb-8">Our Services</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <h3 class="text-xl font-semibold mb-4">Web Penetration Testing</h3>
+          <p>We identify vulnerabilities in your web applications, ensuring robust security against cyber threats.</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <h3 class="text-xl font-semibold mb-4">DevSecOps Integration</h3>
+          <p>We embed security into your development pipeline, fostering secure and efficient software delivery.</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <h3 class="text-xl font-semibold mb-4">Security Consulting</h3>
+          <p>Expert guidance to strengthen your organization's cybersecurity posture and compliance.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="team" class="py-16 animate-on-load team-animate">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl font-bold text-center mb-8">Our Team</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="bg-white p-6 rounded-lg shadow-md flex flex-col items-center">
+          <img src="https://cdn.discordapp.com/attachments/1165747179193897100/1394072935886749840/7B455F28-7D26-44D4-9E96-BC1D05731DB9.png?ex=68757b18&is=68742998&hm=8dbece933c1771da9e850edcef79927f45154e3ad7e2d326aae30cff7e1cab2e&" alt="Recursionn" class="w-32 h-32 rounded-full mb-4">
+          <h3 class="text-xl font-semibold mb-2">Recursionn</h3>
+          <p class="text-center">Recursionn is a dedicated DevSecOps Engineer with over 4 years of experience in integrating security practices within the DevOps process. With a strong background in software development, system administration, and security protocols, Recursionn excels at fostering collaboration between development, operations, and security teams to ensure the delivery of secure and high-quality software.</p>
+          <p class="text-center mt-2">Recursionn has a proven track record of implementing automated security testing and continuous integration/continuous deployment (CI/CD) pipelines, utilizing tools such as Jenkins, GitLab CI, and Docker. Skilled in cloud security, particularly with platforms like AWS and Azure, and adept at using infrastructure as code (IaC) tools such as Terraform and Ansible to enhance security posture.</p>
+          <p class="text-center mt-2">Passionate about staying ahead of emerging threats, Recursionn actively participates in security training and workshops, and holds certifications such as Certified Kubernetes Security Specialist (CKS) and AWS Certified Security – Specialty. Committed to promoting a culture of security awareness within teams and ensuring compliance with industry standards and regulations.</p>
+          <p class="text-center mt-2">In their free time, Recursionn enjoys contributing to open-source projects, participating in hackathons, and sharing knowledge through blogging and speaking engagements.</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-md flex flex-col items-center">
+          <img src="https://cdn.discordapp.com/attachments/1165747179193897100/1394073392856170626/fe5e4a4050121d46.jpg?ex=68757b85&is=68742a05&hm=484e33d2b068944c68d63d05a6ae55e20ceb2ea4e2751929de7573a188978c93&" alt="Mekvil" class="w-32 h-32 rounded-full mb-4">
+          <h3 class="text-xl font-semibold mb-2">Mekvil</h3>
+          <p class="text-center">Mekvil is a wild tech wizard from India, now stirring up chaos in Ukraine's tech and bioengineering scene. Kicking off with a call center in 2019, he’s now elbow-deep in engineering bacteria to create mind-blowing street food—think probiotic pakoras and fermented curry tacos that pack a microbial punch! When he’s not coding or culturing bacteria, Mekvil’s out experimenting with glow-in-the-dark spices and dreaming up the next big food truck revolution, all while dodging rogue microbes and perfecting his "bacteria barbecue" recipe.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="support" class="bg-yellow-100 py-16 animate-on-load support-animate">
+    <div class="container mx-auto px-4 text-center">
+      <h2 class="text-3xl font-bold mb-4">We Stand with Ukraine</h2>
+      <p class="text-lg mb-6">Hood Research Facility LLC proudly supports Ukraine in its defense against Russian aggression. We are committed to providing cybersecurity assistance and resources to Ukrainian organizations, helping to protect critical infrastructure during these challenging times.</p>
+      <a href="https://www.ukraine.ua" target="_blank" class="text-blue-600 underline hover:text-blue-800">Learn More About Supporting Ukraine</a>
+    </div>
+  </section>
+
+  <section id="memorial" class="bg-gray-200 py-16 animate-on-load memorial-animate">
+    <div class="container mx-auto px-4 text-center">
+      <h2 class="text-3xl font-bold mb-4">In Memory of George Droyd</h2>
+      <p class="text-lg mb-6">We dedicate this space to honor the memory of George Droyd, a brilliant mind and passionate cybersecurity advocate. His contributions to our team and the field of penetration testing will never be forgotten. Rest in peace, George.</p>
+      <img src="https://cdn.discordapp.com/attachments/1165747179193897100/1394067784190656592/Untitled.png?ex=6875764c&is=687424cc&hm=4dd180ee2788460809c09094a5717190d49d313800563a50cd2738072aa0e010&" alt="George Droyd Memorial" class="mx-auto max-w-xs rounded-lg shadow-md">
+    </div>
+  </section>
+
+  <section id="contact" class="py-16 animate-on-load contact-animate">
+    <div class="container mx-auto px-4 text-center">
+      <h2 class="text-3xl font-bold mb-4">Contact Us</h2>
+      <p class="text-lg mb-6">Ready to secure your digital assets? Reach out to us via Discord!</p>
+      <div class="max-w-md mx-auto">
+        <p class="text-lg mb-4">Connect with our team members directly:</p>
+        <div class="flex justify-center space-x-6">
+          <a href="https://discord.com" target="_blank" class="text-blue-600 underline hover:text-blue-800">@oldtestamente</a>
+          <a href="https://discord.com" target="_blank" class="text-blue-600 underline hover:text-blue-800">@ssdt</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="bg-blue-900 text-white py-6 animate-on-load footer-animate">
+    <div class="container mx-auto px-4 text-center">
+      <p>© 2025 Hood Research Facility LLC. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>
