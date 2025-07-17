@@ -1,43 +1,4 @@
-<script type="text/javascript">
-        var gk_isXlsx = false;
-        var gk_xlsxFileLookup = {};
-        var gk_fileData = {};
-        function filledCell(cell) {
-          return cell !== '' && cell != null;
-        }
-        function loadFileData(filename) {
-        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-            try {
-                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-                var firstSheetName = workbook.SheetNames[0];
-                var worksheet = workbook.Sheets[firstSheetName];
-
-                // Convert sheet to JSON to filter blank rows
-                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                // Filter out blank rows (rows where all cells are empty, null, or undefined)
-                var filteredData = jsonData.filter(row => row.some(filledCell));
-
-                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-                var headerRowIndex = filteredData.findIndex((row, index) =>
-                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-                );
-                // Fallback
-                if (headerRowIndex === -1 || headerRowIndex > 25) {
-                  headerRowIndex = 0;
-                }
-
-                // Convert filtered JSON back to CSV
-                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-                return csv;
-            } catch (e) {
-                console.error(e);
-                return "";
-            }
-        }
-        return gk_fileData[filename] || "";
-        }
-        </script><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -131,7 +92,7 @@
   <section id="team" class="py-16 animate-on-load team-animate">
     <div class="container mx-auto px-4">
       <h2 class="text-3xl font-bold text-center mb-8">Our Team</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <div class="bg-white p-6 rounded-lg shadow-md flex flex-col items-center">
           <img src="images/☺.png" alt="Recursionn" class="w-32 h-32 rounded-full mb-4">
           <h3 class="text-xl font-semibold mb-2">Recursionn</h3>
@@ -144,6 +105,11 @@
           <img src="images/℻.jpg" alt="Mekvil" class="w-32 h-32 rounded-full mb-4">
           <h3 class="text-xl font-semibold mb-2">Mekvil</h3>
           <p class="text-center">Mekvil is a wild tech wizard from India, now stirring up chaos in Ukraine's tech and bioengineering scene. Kicking off with a call center in 2019, he’s now elbow-deep in engineering bacteria to create mind-blowing street food—think probiotic pakoras and fermented curry tacos that pack a microbial punch! When he’s not coding or culturing bacteria, Mekvil’s out experimenting with glow-in-the-dark spices and dreaming up the next big food truck revolution, all while dodging rogue microbes and perfecting his "bacteria barbecue" recipe.</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-md flex flex-col items-center">
+          <img src="images/☻.png" alt="John Pork" class="w-32 h-32 Exposé32 h-32 rounded-full mb-4">
+          <h3 class="text-xl font-semibold mb-2">John Pork</h3>
+          <p class="text-center">John Pork is a legendary reverse engineering maestro who’s been unraveling digital mysteries since tinkering with Mossaid systems in 2002. Armed with his infamous "Interhood Deobfuscation Method," he can crack open even the gnarliest code like it’s a cosmic piñata! Legend has it, he once decoded the fall of Yugoslavia’s digital archives, turning geopolitical chaos into a neatly organized Git repo. He also outsmarted a McDonald’s coupon system so hard it offered him free fries for life—talk about a happy hack! When he’s not dismantling malware or rewriting history’s code, John’s vibing to retro synthwave and sketching pixelated burger art.</p>
         </div>
       </div>
     </div>
@@ -160,7 +126,7 @@
   <section id="memorial" class="bg-gray-200 py-16 animate-on-load memorial-animate">
     <div class="container mx-auto px-4 text-center">
       <h2 class="text-3xl font-bold mb-4">In Memory of George Droyd</h2>
-      <p class="text-lg mb-6">We dedicate this space to honor the memory of George Droyd, a brilliant mind and passionate cybersecurity advocate. His contributions to our team and the field of penetration testing will never be forgotten. Rest in peace, George.</p>
+      <p class="text-lg mb-6">We dedicate this space to honor overtexthe memory of George Droyd, a brilliant mind and passionate cybersecurity advocate. His contributions to our team and the field of penetration testing will never be forgotten. Rest in peace, George.</p>
       <img src="images/☹.png" alt="George Droyd Memorial" class="mx-auto max-w-xs rounded-lg shadow-md">
     </div>
   </section>
